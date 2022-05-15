@@ -1,0 +1,171 @@
+<div class="container">
+  <h1 class="text-center">Welcome To The Meeting Room</h1>
+  <hr />
+  <br />
+
+  <div class="card">
+    <div class="card-header">
+      <form class="row row-cols-sm-auto justify-content-md-center">
+        <div class="col-12">
+          <div class="input-group">
+            <input
+              class="form-control"
+              placeholder="yyyy-mm-dd"
+              name="dp"
+              [(ngModel)]="model"
+              (ngModelChange)="getmeeting()"
+              ngbDatepicker
+              #d="ngbDatepicker"
+            />
+            <button
+              class="btn btn-outline-secondary bi bi-calendar-day"
+              (click)="d.toggle()"
+              type="button"
+            ></button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <table class="table table-striped">
+      <tbody>
+        <tr></tr>
+        <tr
+          class="shadow-lg p-3 mb-5 bg-body rounded"
+          *ngFor="let hour of hourlist"
+        >
+          <td
+            style="width: 50%"
+            class="p-4 align-middle"
+            [ngStyle]="
+              hour.message
+                ? { 'background-color': 'red', color: 'white' }
+                : { 'background-color': '' }
+            "
+          >
+            {{ hour.slot }}
+          </td>
+          <td class="d-flex justify-content-end align-middle p-4">
+            <button
+              *ngIf="!hour.message"
+              class="btn btn-primary text-center"
+              (click)="openmeeting(content, hour.slot)"
+            >
+              ADD
+            </button>
+            <button
+              *ngIf="hour.message"
+              class="btn btn-dark text-center text-white"
+              (click)="openeditmeeting(content, hour)"
+              style="margin-right: 1rem"
+            >
+              EDIT
+            </button>
+            <button
+              *ngIf="hour.message"
+              class="btn btn-danger text-center"
+              (click)="opendelete(content, hour)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Model Data -->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Meeting Data</h4>
+    <button
+      type="button"
+      class="btn-close"
+      aria-label="Close"
+      (click)="close()"
+    ></button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="meetingform" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="phonenumber">Phone Number</label>
+        <div class="form-group">
+          <input
+            type="tel"
+            class="form-control"
+            minlength="10"
+            maxlength="10"
+            placeholder="Mobile Number"
+            formControlName="phoneNumber"
+            [ngClass]="{ 'is-invalid': submitted && f['phoneNumber'].errors }"
+          />
+          <div
+            *ngIf="submitted && f['phoneNumber'].errors"
+            class="invalid-feedback"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="firstname">First Name</label>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="First Name"
+            formControlName="firstname"
+            [ngClass]="{ 'is-invalid': submitted && f['firstname'].errors }"
+          />
+          <div
+            *ngIf="submitted && f['firstname'].errors"
+            class="invalid-feedback"
+          ></div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="lastname">Last Name</label>
+        <div class="form-group">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Last Name"
+            formControlName="lastname"
+            [ngClass]="{ 'is-invalid': submitted && f['lastname'].errors }"
+          />
+          <div
+            *ngIf="submitted && f['lastname'].errors"
+            class="invalid-feedback"
+          ></div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-6">
+          <button
+            type="button"
+            class="btn btn-outline-dark form-control"
+            (click)="close()"
+          >
+            Cancel
+          </button>
+        </div>
+
+        <div class="col-6">
+          <button
+            *ngIf="!slot"
+            class="btn btn-primary text-center form-control"
+          >
+            Save
+          </button>
+          <button *ngIf="slot" class="btn btn-danger text-center form-control">
+            Edit
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  <!-- <div class="modal-footer">
+  
+  </div> -->
+</ng-template>
